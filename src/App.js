@@ -1,24 +1,47 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import QRCode from 'qrcode';
+import QrReader from 'react-qr-scanner';
 import './App.css';
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      delay: 100,
+      result: 'Loading...',
+      url: null
+    }
+    this.handleScan = this.handleScan.bind(this)
+  }
+
+  componentDidMount() {
+    this.generateQRCode();
+  }
+
+  generateQRCode() {
+    QRCode.toDataURL('http://www.kaniyam.com/qrcode')
+      .then(url => this.setState({ url }))
+      .catch(err => console.error(err))
+  }
+
+  handleScan(data){
+    this.setState({
+      result: data
+    })
+  }
+
   render() {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
+          <img src={this.state.url} alt='qr-code'/>
+          <QrReader
+            delay={this.state.delay}
+            style={{ height: 240, width: 320 }}
+            onError={(err) => console.error(err)}
+            onScan={this.handleScan}
+          />
+          <p>{this.state.result}</p>
         </header>
       </div>
     );
