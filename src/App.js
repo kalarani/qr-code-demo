@@ -7,7 +7,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      delay: 100,
       result: 'Loading...',
       url: null
     }
@@ -36,7 +35,7 @@ class App extends Component {
         <header className="App-header">
           <img src={this.state.url} alt='qr-code'/>
           <QrReader
-            delay={this.state.delay}
+            delay={100}
             style={{ height: 240, width: 320 }}
             onError={(err) => console.error(err)}
             onScan={this.handleScan}
